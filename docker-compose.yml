@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  spaceship-api:
+    build: .
+    container_name: spaceship
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    networks:
+      - spaceship-network
+    depends_on:
+      - db
+
+  db:
+    image: "h2database/h2:latest"
+    container_name: spaceship-db
+    ports:
+      - "9092:9092"
+    environment:
+      - H2_DATABASE=spaceship
+    networks:
+      - spaceship-network
+
+networks:
+  spaceship-network:
+    driver: bridge

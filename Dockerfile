@@ -1,5 +1,8 @@
-# Usa la imagen oficial de Maven para construir la aplicación
-FROM maven:3.9.9-openjdk-21 AS builder
+# Usa la imagen oficial de Eclipse Temurin con JDK 21 y Alpine
+FROM eclipse-temurin:21-jdk-alpine AS builder
+
+# Instala Maven en la imagen
+RUN apk add --no-cache maven
 
 # Establece el directorio de trabajo para el build
 WORKDIR /app
@@ -13,16 +16,13 @@ COPY src ./src
 RUN mvn package -DskipTests
 
 # Usa la imagen oficial de OpenJDK para ejecutar la aplicación
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk-alpine
 
 # Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
 # Copia el JAR compilado desde la fase de build
 COPY --from=builder /app/target/spaceship-0.0.1-SNAPSHOT.jar app.jar
-
-# Copia el archivo .env al contenedor
-COPY .env .env
 
 # Expone el puerto en el que se ejecutará la aplicación
 EXPOSE 8080
