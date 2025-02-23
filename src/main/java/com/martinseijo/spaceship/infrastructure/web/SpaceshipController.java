@@ -37,4 +37,9 @@ public class SpaceshipController {
     public List<SpaceshipDTO> getSpaceshipsByFilter(@RequestBody SpaceshipFilter filter) {
         return spaceshipService.getSpaceshipsByFilter(filter);
     }
+
+    @PostMapping("/create")
+    public SpaceshipDTO create(@RequestBody SpaceshipDTO dto) {
+        return spaceshipService.create(dto);
+    }
 }

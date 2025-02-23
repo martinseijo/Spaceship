@@ -3,6 +3,7 @@ package com.martinseijo.spaceship.application.service;
 import com.martinseijo.spaceship.application.dto.SpaceshipDTO;
 import com.martinseijo.spaceship.application.dto.SpaceshipFilter;
 import com.martinseijo.spaceship.application.mapper.SpaceshipMapper;
+import com.martinseijo.spaceship.domain.model.Spaceship;
 import com.martinseijo.spaceship.domain.repository.SpaceshipRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,5 +34,13 @@ public class SpaceshipService {
 
     public List<SpaceshipDTO> getSpaceshipsByFilter(SpaceshipFilter filter) {
         return mapper.toDTOList(repository.findByNameContainingIgnoreCase(filter.getName()));
+    }
+
+    public SpaceshipDTO create(SpaceshipDTO dto) {
+        Spaceship entity = Spaceship.builder()
+                .name(dto.getName())
+                .build();
+        repository.save(entity);
+        return mapper.toDTO(entity);
     }
 }
