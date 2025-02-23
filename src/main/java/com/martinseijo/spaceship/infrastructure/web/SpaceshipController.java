@@ -42,4 +42,9 @@ public class SpaceshipController {
     public SpaceshipDTO create(@RequestBody SpaceshipDTO dto) {
         return spaceshipService.create(dto);
     }
+
+    @PatchMapping("/update")
+    public SpaceshipDTO update(@RequestBody SpaceshipDTO dto) {
+        return spaceshipService.update(dto);
+    }
 }

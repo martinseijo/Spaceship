@@ -43,4 +43,13 @@ public class SpaceshipService {
         repository.save(entity);
         return mapper.toDTO(entity);
     }
+
+    public SpaceshipDTO update(SpaceshipDTO dto) {
+        Spaceship entity = repository.findById(dto.getId()).orElseThrow();
+        if (dto.getName() != null) {
+            entity.setName(dto.getName());
+        }
+        repository.save(entity);
+        return mapper.toDTO(entity);
+    }
 }
