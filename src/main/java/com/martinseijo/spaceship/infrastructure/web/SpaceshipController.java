@@ -47,4 +47,9 @@ public class SpaceshipController {
     public SpaceshipDTO update(@RequestBody SpaceshipDTO dto) {
         return spaceshipService.update(dto);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public SpaceshipDTO deleteById(@PathVariable Long id) {
+        return spaceshipService.delete(id);
+    }
 }

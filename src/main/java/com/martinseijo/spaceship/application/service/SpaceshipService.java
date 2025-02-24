@@ -52,4 +52,10 @@ public class SpaceshipService {
         repository.save(entity);
         return mapper.toDTO(entity);
     }
+
+    public SpaceshipDTO delete(Long id) {
+        Spaceship entity = repository.findById(id).orElseThrow();
+        repository.delete(entity);
+        return mapper.toDTO(entity);
+    }
 }
