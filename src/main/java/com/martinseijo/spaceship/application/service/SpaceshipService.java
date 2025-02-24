@@ -6,6 +6,7 @@ import com.martinseijo.spaceship.application.mapper.SpaceshipMapper;
 import com.martinseijo.spaceship.domain.model.Spaceship;
 import com.martinseijo.spaceship.domain.repository.SpaceshipRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,17 @@ public class SpaceshipService {
 
     private final SpaceshipMapper mapper;
 
+    @Cacheable("spaceships")
     public List<SpaceshipDTO> getAllSpaceships() {
         return mapper.toDTOList(repository.findAll());
     }
 
+    @Cacheable("spaceshipsPaginated")
     public Page<SpaceshipDTO> getAllSpaceshipsPaginated(Pageable pageable) {
         return repository.findAll(pageable).map(mapper::toDTO);
     }
 
+    @Cacheable("spaceship")
     public SpaceshipDTO getById(Long id) {
         return mapper.toDTO(repository.findById(id).orElseThrow());
     }
