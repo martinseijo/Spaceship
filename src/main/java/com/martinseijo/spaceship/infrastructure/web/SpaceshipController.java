@@ -3,7 +3,7 @@ package com.martinseijo.spaceship.infrastructure.web;
 import com.martinseijo.spaceship.application.dto.SpaceshipDTO;
 import com.martinseijo.spaceship.application.dto.SpaceshipFilter;
 import com.martinseijo.spaceship.application.service.SpaceshipService;
-import com.martinseijo.spaceship.domain.model.Spaceship;
+import com.martinseijo.spaceship.domain.exception.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -57,7 +57,7 @@ public class SpaceshipController {
             @ApiResponse(responseCode = "404", description = "Spaceship not found",
                     content = @Content) })
     @GetMapping("/{id}")
-    public SpaceshipDTO getById(@PathVariable Long id) {
+    public SpaceshipDTO getById(@PathVariable Long id) throws ResourceNotFoundException {
         return spaceshipService.getById(id);
     }
 
@@ -93,7 +93,7 @@ public class SpaceshipController {
             @ApiResponse(responseCode = "404", description = "Spaceship not found",
                     content = @Content) })
     @PutMapping("/update")
-    public SpaceshipDTO update(@RequestBody SpaceshipDTO dto) {
+    public SpaceshipDTO update(@RequestBody SpaceshipDTO dto) throws ResourceNotFoundException {
         return spaceshipService.update(dto);
     }
 
@@ -105,7 +105,7 @@ public class SpaceshipController {
             @ApiResponse(responseCode = "404", description = "Spaceship not found",
                     content = @Content) })
     @DeleteMapping("/delete/{id}")
-    public SpaceshipDTO deleteById(@PathVariable Long id) {
+    public SpaceshipDTO deleteById(@PathVariable Long id) throws ResourceNotFoundException {
         return spaceshipService.delete(id);
     }
 }

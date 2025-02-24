@@ -3,6 +3,7 @@ package com.martinseijo.spaceship.application.service;
 import com.martinseijo.spaceship.application.dto.SpaceshipDTO;
 import com.martinseijo.spaceship.application.dto.SpaceshipFilter;
 import com.martinseijo.spaceship.application.mapper.SpaceshipMapper;
+import com.martinseijo.spaceship.domain.exception.ResourceNotFoundException;
 import com.martinseijo.spaceship.domain.model.Spaceship;
 import com.martinseijo.spaceship.domain.repository.SpaceshipRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SpaceshipService {
 
-    private final SpaceshipRepository repository;
+    private static final String SPACESHIP_NOT_FOUND = "Spaceship not found with id ";
 
+    private final SpaceshipRepository repository;
     private final SpaceshipMapper mapper;
 
     @Cacheable("spaceships")
@@ -32,8 +34,9 @@ public class SpaceshipService {
     }
 
     @Cacheable("spaceship")
-    public SpaceshipDTO getById(Long id) {
-        return mapper.toDTO(repository.findById(id).orElseThrow());
+    public SpaceshipDTO getById(Long id) throws ResourceNotFoundException {
+        return mapper.toDTO(repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(SPACESHIP_NOT_FOUND + id)));
     }
 
     public List<SpaceshipDTO> getSpaceshipsByFilter(SpaceshipFilter filter) {
@@ -48,8 +51,9 @@ public class SpaceshipService {
         return mapper.toDTO(entity);
     }
 
-    public SpaceshipDTO update(SpaceshipDTO dto) {
-        Spaceship entity = repository.findById(dto.getId()).orElseThrow();
+    public SpaceshipDTO update(SpaceshipDTO dto) throws ResourceNotFoundException {
+        Spaceship entity = repository.findById(dto.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(SPACESHIP_NOT_FOUND + dto.getId()));
         if (dto.getName() != null) {
             entity.setName(dto.getName());
         }
@@ -57,8 +61,9 @@ public class SpaceshipService {
         return mapper.toDTO(entity);
     }
 
-    public SpaceshipDTO delete(Long id) {
-        Spaceship entity = repository.findById(id).orElseThrow();
+    public SpaceshipDTO delete(Long id) throws ResourceNotFoundException {
+        Spaceship entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(SPACESHIP_NOT_FOUND + id));
         repository.delete(entity);
         return mapper.toDTO(entity);
     }

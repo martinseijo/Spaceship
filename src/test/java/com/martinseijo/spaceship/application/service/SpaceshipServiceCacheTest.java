@@ -1,14 +1,12 @@
 package com.martinseijo.spaceship.application.service;
 
 import com.martinseijo.spaceship.application.dto.SpaceshipDTO;
+import com.martinseijo.spaceship.domain.exception.ResourceNotFoundException;
 import com.martinseijo.spaceship.domain.model.Spaceship;
 import com.martinseijo.spaceship.domain.repository.SpaceshipRepository;
-import org.instancio.Instancio;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,7 +19,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @SpringBootTest
 class SpaceshipServiceCacheTest {
@@ -48,7 +45,7 @@ class SpaceshipServiceCacheTest {
     }
 
     @Test
-    void testGetByIdCaching() {
+    void testGetByIdCaching() throws ResourceNotFoundException {
         SpaceshipDTO spaceship = new SpaceshipDTO();
         spaceship.setId(1L);
         spaceship.setName("Enterprise");
