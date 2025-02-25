@@ -13,12 +13,12 @@ services:
       - db
 
   db:
-    image: "h2database/h2:latest"
+    image: oscarfonts/h2
     container_name: spaceship-db
     ports:
       - "9092:9092"
     environment:
-      - H2_DATABASE=spaceship
+      - H2_OPTIONS=-ifNotExists
     networks:
       - spaceship-network
 
