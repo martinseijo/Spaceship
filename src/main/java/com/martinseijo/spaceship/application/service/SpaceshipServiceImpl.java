@@ -3,6 +3,7 @@ package com.martinseijo.spaceship.application.service;
 import com.martinseijo.spaceship.application.dto.SpaceshipDTO;
 import com.martinseijo.spaceship.application.dto.SpaceshipFilter;
 import com.martinseijo.spaceship.application.mapper.SpaceshipMapper;
+import com.martinseijo.spaceship.domain.exception.PaginationException;
 import com.martinseijo.spaceship.domain.exception.ResourceNotFoundException;
 import com.martinseijo.spaceship.domain.model.Spaceship;
 import com.martinseijo.spaceship.domain.repository.SpaceshipRepository;
@@ -33,7 +34,15 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     @Override
     @Cacheable("spaceshipsPaginated")
     public Page<SpaceshipDTO> getAllSpaceshipsPaginated(Pageable pageable) {
-        return repository.findAll(pageable).map(mapper::toDTO);
+        try {
+            Page<SpaceshipDTO> result = repository.findAll(pageable).map(mapper::toDTO);
+            if (result.isEmpty()) {
+                throw new ResourceNotFoundException("No spaceships found");
+            }
+            return result;
+        } catch (Exception e) {
+            throw new PaginationException("Error retrieving paginated spaceships", e);
+        }
     }
 
     @Override

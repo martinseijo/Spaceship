@@ -1,6 +1,7 @@
 package com.martinseijo.spaceship.infrastructure.exception;
 
 import com.martinseijo.spaceship.domain.exception.InvalidInputException;
+import com.martinseijo.spaceship.domain.exception.PaginationException;
 import com.martinseijo.spaceship.domain.exception.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -43,5 +44,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleGlobalException(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(PaginationException.class)
+    public ResponseEntity<?> handlePaginationException(PaginationException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 }
