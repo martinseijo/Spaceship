@@ -24,10 +24,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-class SpaceshipServiceTest {
+class SpaceshipServiceImplTest {
 
     @Autowired
-    private SpaceshipService spaceshipService;
+    private SpaceshipServiceImpl spaceshipService;
 
     @MockitoBean
     private SpaceshipRepository repository;

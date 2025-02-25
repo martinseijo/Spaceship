@@ -2,8 +2,8 @@ package com.martinseijo.spaceship.infrastructure.web;
 
 import com.martinseijo.spaceship.application.dto.SpaceshipDTO;
 import com.martinseijo.spaceship.application.dto.SpaceshipFilter;
-import com.martinseijo.spaceship.application.service.SpaceshipService;
 import com.martinseijo.spaceship.domain.exception.ResourceNotFoundException;
+import com.martinseijo.spaceship.domain.service.SpaceshipService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class SpaceshipControllerTest {
+class SpaceshipControllerImplTest {
 
     @LocalServerPort
     private int port;

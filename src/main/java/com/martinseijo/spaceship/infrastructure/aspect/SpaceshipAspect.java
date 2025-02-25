@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SpaceshipAspect {
 
-    @Pointcut("execution(* com.martinseijo.spaceship.infrastructure.web.SpaceshipController.getById(..)) && args(id)")
+    @Pointcut("execution(* com.martinseijo.spaceship.infrastructure.web.impl.SpaceshipControllerImpl.getById(..)) && args(id)")
     public void getByIdMethod(Long id) {}
 
     @Before("getByIdMethod(id)")
