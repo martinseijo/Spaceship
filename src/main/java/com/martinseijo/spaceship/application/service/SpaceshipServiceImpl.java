@@ -26,13 +26,11 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     private final SpaceshipMapper mapper;
 
     @Override
-    @Cacheable("spaceships")
     public List<SpaceshipDTO> getAllSpaceships() {
         return mapper.toDTOList(repository.findAll());
     }
 
     @Override
-    @Cacheable("spaceshipsPaginated")
     public Page<SpaceshipDTO> getAllSpaceshipsPaginated(Pageable pageable) {
         try {
             Page<SpaceshipDTO> result = repository.findAll(pageable).map(mapper::toDTO);
