@@ -12,7 +12,7 @@ public interface SpaceshipService {
     List<SpaceshipDTO> getAllSpaceships();
     SpaceshipDTO getById(Long id) throws ResourceNotFoundException;
     Page<SpaceshipDTO> getAllSpaceshipsPaginated(Pageable pageable);
-    List<SpaceshipDTO> getSpaceshipsByFilter(SpaceshipFilter filter);
+    Page<SpaceshipDTO> getSpaceshipsByFilter(SpaceshipFilter filter, Pageable pageable);
     SpaceshipDTO create(SpaceshipDTO spaceshipDTO);
     SpaceshipDTO update(SpaceshipDTO spaceshipDTO) throws ResourceNotFoundException;
     SpaceshipDTO delete(Long id) throws ResourceNotFoundException;

@@ -51,8 +51,12 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     }
 
     @Override
-    public List<SpaceshipDTO> getSpaceshipsByFilter(SpaceshipFilter filter) {
-        return mapper.toDTOList(repository.findByNameContainingIgnoreCase(filter.getName()));
+    public Page<SpaceshipDTO> getSpaceshipsByFilter(SpaceshipFilter filter, Pageable pageable) {
+        try {
+            return repository.findByNameContainingIgnoreCase(filter.getName(), pageable).map(mapper::toDTO);
+        } catch (Exception e) {
+            throw new PaginationException("Error retrieving paginated spaceships", e);
+        }
     }
 
     @Override

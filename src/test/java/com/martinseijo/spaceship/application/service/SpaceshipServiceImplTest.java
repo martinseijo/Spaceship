@@ -75,12 +75,13 @@ class SpaceshipServiceImplTest {
     void testGetSpaceshipsByFilter() {
         SpaceshipFilter filter = new SpaceshipFilter();
         filter.setName("Enterprise");
-        when(repository.findByNameContainingIgnoreCase("Enterprise")).thenReturn(Collections.singletonList(new Spaceship()));
+        Pageable pageable = PageRequest.of(0, 2);
+        when(repository.findByNameContainingIgnoreCase("Enterprise", pageable)).thenReturn(new PageImpl<>(Collections.singletonList(new Spaceship())));
 
-        List<SpaceshipDTO> result = spaceshipService.getSpaceshipsByFilter(filter);
+        Page<SpaceshipDTO> result = spaceshipService.getSpaceshipsByFilter(filter, pageable);
 
         assertThat(result).isNotEmpty();
-        verify(repository, times(1)).findByNameContainingIgnoreCase("Enterprise");
+        verify(repository, times(1)).findByNameContainingIgnoreCase("Enterprise", pageable);
     }
 
     @Test

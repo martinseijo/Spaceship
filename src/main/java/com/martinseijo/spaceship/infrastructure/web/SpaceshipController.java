@@ -13,7 +13,7 @@ public interface SpaceshipController {
     ResponseEntity<List<SpaceshipDTO>> getAllSpaceships();
     ResponseEntity<SpaceshipDTO> getById(Long id) throws ResourceNotFoundException;
     ResponseEntity<Page<SpaceshipDTO>> getAllSpaceshipsPaginated(Pageable pageable);
-    ResponseEntity<List<SpaceshipDTO>> getSpaceshipsByFilter(SpaceshipFilter filter);
+    ResponseEntity<Page<SpaceshipDTO>> getSpaceshipsByFilter(SpaceshipFilter filter, Pageable pageable);
     ResponseEntity<SpaceshipDTO> create(SpaceshipDTO spaceshipDTO);
     ResponseEntity<SpaceshipDTO> update(SpaceshipDTO spaceshipDTO) throws ResourceNotFoundException;
     ResponseEntity<Void> deleteById(Long id) throws ResourceNotFoundException;

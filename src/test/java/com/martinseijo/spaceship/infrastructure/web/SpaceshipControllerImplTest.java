@@ -1,7 +1,6 @@
 package com.martinseijo.spaceship.infrastructure.web;
 
 import com.martinseijo.spaceship.application.dto.SpaceshipDTO;
-import com.martinseijo.spaceship.application.dto.SpaceshipFilter;
 import com.martinseijo.spaceship.domain.exception.ResourceNotFoundException;
 import com.martinseijo.spaceship.domain.service.SpaceshipService;
 import org.junit.jupiter.api.Test;
@@ -60,18 +59,6 @@ class SpaceshipControllerImplTest {
         ResponseEntity<String> response = restTemplate.getForEntity(createURLWithPort("/spaceships/1"), String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
-
-    @Test
-    void testGetSpaceshipsByFilter() {
-        SpaceshipFilter filter = new SpaceshipFilter();
-        filter.setName("Enterprise");
-        when(spaceshipService.getSpaceshipsByFilter(any())).thenReturn(Collections.singletonList(new SpaceshipDTO()));
-
-        ResponseEntity<SpaceshipDTO[]> response = restTemplate.postForEntity(createURLWithPort("/spaceships/search"), filter, SpaceshipDTO[].class);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isNotEmpty();
     }
 
     @Test

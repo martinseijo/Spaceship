@@ -39,9 +39,6 @@ public class SpaceshipControllerImpl implements SpaceshipController {
     @GetMapping
     public ResponseEntity<List<SpaceshipDTO>> getAllSpaceships() {
         List<SpaceshipDTO> spaceships = spaceshipService.getAllSpaceships();
-        if (spaceships.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         return ResponseEntity.ok(spaceships);
     }
 
@@ -56,9 +53,6 @@ public class SpaceshipControllerImpl implements SpaceshipController {
     @GetMapping("/paginated")
     public ResponseEntity<Page<SpaceshipDTO>> getAllSpaceshipsPaginated(Pageable pageable) {
         Page<SpaceshipDTO> result = spaceshipService.getAllSpaceshipsPaginated(pageable);
-        if (result.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         return ResponseEntity.ok(result);
     }
 
@@ -85,11 +79,8 @@ public class SpaceshipControllerImpl implements SpaceshipController {
             @ApiResponse(responseCode = "404", description = "Spaceships not found",
                     content = @Content) })
     @PostMapping("/search")
-    public ResponseEntity<List<SpaceshipDTO>> getSpaceshipsByFilter(@RequestBody SpaceshipFilter filter) {
-        List<SpaceshipDTO> spaceships = spaceshipService.getSpaceshipsByFilter(filter);
-        if (spaceships.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<Page<SpaceshipDTO>> getSpaceshipsByFilter(@RequestBody SpaceshipFilter filter, Pageable pageable) {
+        Page<SpaceshipDTO> spaceships = spaceshipService.getSpaceshipsByFilter(filter, pageable);
         return ResponseEntity.ok(spaceships);
     }
 
