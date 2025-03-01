@@ -10,6 +10,8 @@ import com.martinseijo.spaceship.domain.model.Spaceship;
 import com.martinseijo.spaceship.domain.repository.SpaceshipRepository;
 import com.martinseijo.spaceship.domain.service.SpaceshipService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -69,6 +71,7 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     }
 
     @Override
+    @CachePut(value = "spaceship", key = "#dto.id")
     public SpaceshipDTO update(SpaceshipDTO dto) throws ResourceNotFoundException {
         Spaceship entity = repository.findById(dto.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(SPACESHIP_NOT_FOUND + dto.getId()));
@@ -80,6 +83,7 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     }
 
     @Override
+    @CacheEvict(value = "spaceship", key = "#id")
     public SpaceshipDTO delete(Long id) throws ResourceNotFoundException {
         Spaceship entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(SPACESHIP_NOT_FOUND + id));
