@@ -1,5 +1,6 @@
 package com.martinseijo.spaceship.infrastructure.web;
 
+import com.martinseijo.spaceship.application.dto.SpaceshipFilter;
 import com.martinseijo.spaceship.domain.model.Spaceship;
 import com.martinseijo.spaceship.domain.repository.SpaceshipRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -61,7 +64,7 @@ class SpaceshipControllerIT {
         mockMvc.perform(post("/spaceships/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newSpaceship))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Millennium Falcon"));
     }
 
@@ -88,5 +91,38 @@ class SpaceshipControllerIT {
 
         mockMvc.perform(get("/spaceships/" + spaceshipId))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testGetAllSpaceshipsPaginated() throws Exception {
+        Pageable pageable = PageRequest.of(0, 1);
+
+        mockMvc.perform(get("/spaceships/paginated")
+                        .param("page", String.valueOf(pageable.getPageNumber()))
+                        .param("size", String.valueOf(pageable.getPageSize()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.size()").value(1))
+                .andExpect(jsonPath("$.content[0].name").value("Enterprise"));
+    }
+
+    @Test
+    void testGetSpaceshipsByFilter() throws Exception {
+        SpaceshipFilter filter = new SpaceshipFilter();
+        filter.setName("Enterprise");
+        Pageable pageable = PageRequest.of(0, 1);
+
+        mockMvc.perform(post("/spaceships/search")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "name": "Enterprise"
+                                }
+                                """)
+                        .param("page", String.valueOf(pageable.getPageNumber()))
+                        .param("size", String.valueOf(pageable.getPageSize())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.size()").value(1))
+                .andExpect(jsonPath("$.content[0].name").value("Enterprise"));
     }
 }

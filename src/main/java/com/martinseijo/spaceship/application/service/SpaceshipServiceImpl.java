@@ -3,6 +3,7 @@ package com.martinseijo.spaceship.application.service;
 import com.martinseijo.spaceship.application.dto.SpaceshipDTO;
 import com.martinseijo.spaceship.application.dto.SpaceshipFilter;
 import com.martinseijo.spaceship.application.mapper.SpaceshipMapper;
+import com.martinseijo.spaceship.domain.exception.InvalidSpaceshipException;
 import com.martinseijo.spaceship.domain.exception.PaginationException;
 import com.martinseijo.spaceship.domain.exception.ResourceNotFoundException;
 import com.martinseijo.spaceship.domain.model.Spaceship;
@@ -33,11 +34,7 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     @Override
     public Page<SpaceshipDTO> getAllSpaceshipsPaginated(Pageable pageable) {
         try {
-            Page<SpaceshipDTO> result = repository.findAll(pageable).map(mapper::toDTO);
-            if (result.isEmpty()) {
-                throw new ResourceNotFoundException("No spaceships found");
-            }
-            return result;
+            return repository.findAll(pageable).map(mapper::toDTO);
         } catch (Exception e) {
             throw new PaginationException("Error retrieving paginated spaceships", e);
         }
@@ -61,6 +58,9 @@ public class SpaceshipServiceImpl implements SpaceshipService {
 
     @Override
     public SpaceshipDTO create(SpaceshipDTO dto) {
+        if (dto.getName() == null || dto.getName().isEmpty()) {
+            throw new InvalidSpaceshipException("Spaceship name cannot be null or empty");
+        }
         Spaceship entity = Spaceship.builder()
                 .name(dto.getName())
                 .build();

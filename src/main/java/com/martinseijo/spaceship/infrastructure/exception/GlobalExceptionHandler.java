@@ -1,6 +1,7 @@
 package com.martinseijo.spaceship.infrastructure.exception;
 
 import com.martinseijo.spaceship.domain.exception.InvalidInputException;
+import com.martinseijo.spaceship.domain.exception.InvalidSpaceshipException;
 import com.martinseijo.spaceship.domain.exception.PaginationException;
 import com.martinseijo.spaceship.domain.exception.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -48,6 +49,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PaginationException.class)
     public ResponseEntity<ErrorDetails> handlePaginationException(PaginationException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidSpaceshipException.class)
+    public ResponseEntity<ErrorDetails> handleInvalidSpaceshipException(InvalidSpaceshipException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }

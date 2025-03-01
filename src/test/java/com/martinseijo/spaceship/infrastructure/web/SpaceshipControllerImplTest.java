@@ -69,7 +69,7 @@ class SpaceshipControllerImplTest {
 
         ResponseEntity<SpaceshipDTO> response = restTemplate.postForEntity(createURLWithPort("/spaceships/create"), dto, SpaceshipDTO.class);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNotNull();
     }
 
